@@ -6,7 +6,7 @@
     <title>PokeBank | DAW</title>
 
     <!-- Ícono de la pestaña (favicon) -->
-    <link rel="icon" href="../assets/img/icons/psyduck_icon.ico" type="image/x-icon"/>
+    <link rel="icon" href="../assets/img/charmander" type="image/x-icon"/>
 
     <!-- Bootstrap 5 para estilos y diseño responsivo -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -55,20 +55,22 @@
       </aside>
 
       <!-- Contenido Principal -->
-      <main class="main-content-historial">
+      <main class="main-content-historial text-center d-flex flex-column align-items-center">
         <h1>Dashboard</h1>
 
+        <img src="../assets/img/charmander.png" alt="Pokemon Dinero" class="img-fluid mb-4" style="max-width: 300px;">
+
         <!-- Sección para consultar saldo -->
-        <div class="card p-3 mb-3">
+        <div class="card p-3 mb-5 w-50">
           <h3>Consultar Saldo</h3>
           <p>Saldo disponible: <span id="saldo">$0.00</span></p>
           <button class="btn btn-primary" onclick="consultarSaldo()">
-            Actualizar Saldo
+            Este es su Saldo Disponible
           </button>
         </div>
 
         <!-- Sección para pagar servicios -->
-        <div class="card p-3">
+        <div class="card p-3 w-50">
           <h3>Pagar Servicios</h3>
           <select id="servicio" class="form-select mb-2">
             <option value="luz">Luz</option>
@@ -76,19 +78,38 @@
             <option value="cable">Cable</option>
             <option value="internet">Internet</option>
           </select>
-          <input type="number"id="monto"class="form-control mb-2"placeholder="Monto a pagar"/>
-          <button class="btn btn-success" onclick="pagarServicio()">Pagar</button>
+          <input type="number" id="monto" class="form-control mb-2" placeholder="Monto a pagar"/>
+          <button class="btn btn-success mb-2" onclick="pagarServicio()">Pagar</button>
+
+          <!-- Lista de servicios a pagar -->
+          <div class="card p-2 mt-3">
+            <h5>Lista de servicios disponibles</h5>
+            <ul id="listaServicios" class="mt-2">
+              <!-- Los servicios serán insertados dinámicamente -->
+            </ul>
+          </div>
+
+          <!-- Lista de servicios agregados a favoritos -->
+          <div class="card p-2 mt-3">
+            <h5>Servicios Agregados a Pago Favorito:</h5>
+            <ul id="serviciosAgregados" class="mt-2"></ul>
+          </div>
         </div>
       </main>
     </div>
 
     <script>
+      // Obtener los servicios y saldo guardados en localStorage
       let saldo = parseFloat(localStorage.getItem("saldoActual")) || 0;
+      let serviciosFavoritos = JSON.parse(localStorage.getItem("serviciosFavoritos")) || [];
+      let serviciosDisponibles = JSON.parse(localStorage.getItem("serviciosDisponibles")) || ['luz', 'agua', 'cable', 'internet'];
 
+      // Actualizar la lista de servicios favoritos al cargar la página
       document.getElementById("saldo").textContent = `$${saldo.toFixed(2)}`;
+      actualizarServiciosAgregados();
+      actualizarServiciosDisponibles();
 
       function consultarSaldo() {
-
         saldo = parseFloat(localStorage.getItem("saldoActual")) || 0;
         document.getElementById("saldo").textContent = `$${saldo.toFixed(2)}`;
       }
@@ -115,6 +136,76 @@
 
         alert(`Pago realizado con éxito. Servicio: ${servicio}, Monto: $${monto.toFixed(2)}`);
       }
+
+      function agregarFavorito(servicio) {
+        // Verificar si el servicio ya está en los favoritos
+        if (!serviciosFavoritos.includes(servicio)) {
+          serviciosFavoritos.push(servicio);
+          serviciosDisponibles = serviciosDisponibles.filter(s => s !== servicio); // Eliminar de servicios disponibles
+          localStorage.setItem("serviciosFavoritos", JSON.stringify(serviciosFavoritos));
+          localStorage.setItem("serviciosDisponibles", JSON.stringify(serviciosDisponibles));
+          actualizarServiciosAgregados();
+          actualizarServiciosDisponibles();
+        } else {
+          alert("Este servicio ya está en tus favoritos.");
+        }
+      }
+
+      function quitarDeFavoritos(servicio) {
+        // Quitar el servicio de la lista de favoritos
+        const index = serviciosFavoritos.indexOf(servicio);
+        if (index !== -1) {
+          serviciosFavoritos.splice(index, 1);
+          serviciosDisponibles.push(servicio); // Agregar a servicios disponibles
+          localStorage.setItem("serviciosFavoritos", JSON.stringify(serviciosFavoritos));
+          localStorage.setItem("serviciosDisponibles", JSON.stringify(serviciosDisponibles));
+          actualizarServiciosAgregados();
+          actualizarServiciosDisponibles();
+        }
+      }
+
+      function actualizarServiciosAgregados() {
+        const listaServiciosAgregados = document.getElementById("serviciosAgregados");
+        listaServiciosAgregados.innerHTML = ""; // Limpiar lista
+
+        serviciosFavoritos.forEach(servicio => {
+          const nuevoItem = document.createElement("li");
+          nuevoItem.classList.add("d-flex", "justify-content-between", "align-items-center");
+          nuevoItem.textContent = servicio.charAt(0).toUpperCase() + servicio.slice(1);
+
+          // Agregar botón para quitar de favoritos
+          const botonQuitar = document.createElement("button");
+          botonQuitar.classList.add("btn", "btn-danger");
+          botonQuitar.textContent = "Quitar de Favoritos";
+          botonQuitar.onclick = function() { quitarDeFavoritos(servicio); };
+          nuevoItem.appendChild(botonQuitar);
+
+          listaServiciosAgregados.appendChild(nuevoItem);
+        });
+      }
+
+      function actualizarServiciosDisponibles() {
+        const listaServicios = document.getElementById("listaServicios");
+        listaServicios.innerHTML = ""; // Limpiar lista
+
+        serviciosDisponibles.forEach(servicio => {
+          const nuevoItem = document.createElement("li");
+          nuevoItem.classList.add("d-flex", "justify-content-between", "align-items-center");
+
+          const servicioTexto = document.createElement("span");
+          servicioTexto.textContent = servicio.charAt(0).toUpperCase() + servicio.slice(1);
+          nuevoItem.appendChild(servicioTexto);
+
+          const botonAgregar = document.createElement("button");
+          botonAgregar.classList.add("btn", "btn-link");
+          botonAgregar.textContent = "Agregar a Favoritos";
+          botonAgregar.onclick = function() { agregarFavorito(servicio); };
+          nuevoItem.appendChild(botonAgregar);
+
+          listaServicios.appendChild(nuevoItem);
+        });
+      }
     </script>
   </body>
 </html>
+
