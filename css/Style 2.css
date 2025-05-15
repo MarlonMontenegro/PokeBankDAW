@@ -236,3 +236,15 @@ text-align: left;
 max-width: 550px; 
 height: auto; 
 }
+
+.container-centrado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
