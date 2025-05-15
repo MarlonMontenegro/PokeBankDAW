@@ -123,3 +123,33 @@ canvas {
   height: auto !important;
   max-height: 300px;
 }
+
+.welcome-section {
+  width: 100%;
+  height: calc(100vh - 40px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.welcome-card {
+  background: var(--neutral);
+  border: 2px solid var(--primary-accent);
+  border-radius: 15px;
+  padding: 40px 30px;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-title {
+  font-size: 22px;
+  color: var(--primary-accent);
+  margin-bottom: 15px;
+}
+
+.welcome-text {
+  font-size: 14px;
+  color: var(--contrast);
+  line-height: 1.4;
+}
