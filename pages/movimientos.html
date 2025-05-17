@@ -6,11 +6,21 @@
     <title>PokeBank | DAW - Movimientos</title>
 
     <!-- Ícono de la pestaña (favicon) -->
-    <link rel="icon" href="../assets/img/icons/psyduck_icon.ico" type="image/x-icon"/>
+    <link
+      rel="icon"
+      href="../assets/img/icons/psyduck_icon.ico"
+      type="image/x-icon"
+    />
 
     <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -28,13 +38,17 @@
               alt="Logo"
               style="width: 200px; height: auto"
             />
-            </a>
-          </h4>
-  
-          <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Pagos y consulta de saldo</a>
-          <a href="movimientos.html"><i class="bi bi-speedometer2"></i> Realizar movimientos</a>
-          <a href="historial.html"><i class="bi bi-table"></i> Historial</a>
-          <a href="graficos.html"><i class="bi bi-grid"></i> Gráficos</a>
+          </a>
+        </h4>
+
+        <a href="dashboard.html"
+          ><i class="bi bi-speedometer2"></i> Pagos y consulta de saldo</a
+        >
+        <a href="movimientos.html"
+          ><i class="bi bi-speedometer2"></i> Realizar movimientos</a
+        >
+        <a href="historial.html"><i class="bi bi-table"></i> Historial</a>
+        <a href="graficos.html"><i class="bi bi-grid"></i> Gráficos</a>
 
         <div class="user-info">
           <div class="profile-pic">
@@ -42,16 +56,21 @@
             <span>Ash Ketchum</span>
           </div>
           <form action="../index.html" method="get">
-          <div>            
-            <button type="submit" class="btn btn-outline-danger btn-salir">Salir</button>          
-          </div>
-        </form>
+            <div>
+              <button type="submit" class="btn btn-outline-danger btn-salir">
+                Salir
+              </button>
+            </div>
+          </form>
         </div>
       </aside>
 
       <main class="main-content-index">
         <h1 class="mt-3">Depósitos y Retiros</h1>
-        <p>¿Quieres realizar movimientos en tus pokedolares? Nosotros te apoyamos en eso, no te quedes sin tus pokeitems.</p>
+        <p>
+          ¿Quieres realizar movimientos en tus pokedolares? Nosotros te apoyamos
+          en eso, no te quedes sin tus pokeitems.
+        </p>
 
         <section class="card p-4 mb-4 shadow-sm">
           <h2 class="h4">Operaciones</h2>
@@ -64,8 +83,16 @@
             <div class="col-md-6">
               <label class="form-label">Acción:</label>
               <div class="d-flex align-items-center">
-                <button type="button" id="btnDepositar" class="btn btn-success me-2">Depositar</button>
-                <button type="button" id="btnRetirar" class="btn btn-danger">Retirar</button>
+                <button
+                  type="button"
+                  id="btnDepositar"
+                  class="btn btn-success me-2"
+                >
+                  Depositar
+                </button>
+                <button type="button" id="btnRetirar" class="btn btn-danger">
+                  Retirar
+                </button>
               </div>
             </div>
           </form>
@@ -84,42 +111,64 @@
             </thead>
             <tbody></tbody>
           </table>
-          <div style="display: flex; justify-content: center;">
+          <div style="display: flex; justify-content: center">
             <button id="btnLimpiar" class="btn btn-warning mt-2">
               <i class="bi bi-trash"></i> Limpiar historial
             </button>
           </div>
-            <div style="display: flex; justify-content: center; margin-top: 40px;">
-             <button 
-                onclick="generarComprobante('Ash Ketchum', '0987654321', 'Depósito', 100, 600)" 
-                style="padding: 12px 24px; font-size: 16px; background-color: #ffcb05; color: #2a75bb; border: none; border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
-                Descargar comprobante de transacción
-              </button>
-            </div>
-
+          <div style="display: flex; justify-content: center; margin-top: 40px">
+            <button
+              onclick="generarComprobante('Ash Ketchum', '0987654321', 'Depósito', 100, 600)"
+              style="
+                padding: 12px 24px;
+                font-size: 16px;
+                background-color: #ffcb05;
+                color: #2a75bb;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+              "
+            >
+              Descargar comprobante de transacción
+            </button>
+          </div>
         </section>
       </main>
     </div>
 
     <script>
       let saldoActual = parseFloat(localStorage.getItem("saldoActual")) || 0;
-      let historialMovimientos = JSON.parse(localStorage.getItem("historialMovimientos")) || [];
+      let historialMovimientos =
+        JSON.parse(localStorage.getItem("historialMovimientos")) || [];
 
       const inputMonto = document.getElementById("monto");
       const btnDepositar = document.getElementById("btnDepositar");
       const btnRetirar = document.getElementById("btnRetirar");
-      const tablaHistorialBody = document.querySelector("#tablaHistorial tbody");
+      const tablaHistorialBody = document.querySelector(
+        "#tablaHistorial tbody"
+      );
 
       function mostrarSaldo() {
-        document.getElementById("saldo").textContent = `$${saldoActual.toFixed(2)}`;
+        document.getElementById("saldo").textContent = `$${saldoActual.toFixed(
+          2
+        )}`;
       }
 
       function agregarMovimiento(tipo, monto, saldoFinal) {
         const fechaActual = new Date().toLocaleString();
-        const movimiento = { fecha: fechaActual, tipo, monto: monto.toFixed(2), saldo: saldoFinal.toFixed(2) };
+        const movimiento = {
+          fecha: fechaActual,
+          tipo,
+          monto: monto.toFixed(2),
+          saldo: saldoFinal.toFixed(2),
+        };
 
         historialMovimientos.push(movimiento);
-        localStorage.setItem("historialMovimientos", JSON.stringify(historialMovimientos));
+        localStorage.setItem(
+          "historialMovimientos",
+          JSON.stringify(historialMovimientos)
+        );
 
         mostrarHistorial();
       }
@@ -141,7 +190,7 @@
       btnDepositar.addEventListener("click", () => {
         const monto = parseFloat(inputMonto.value);
         if (isNaN(monto) || monto <= 0) {
-          swal("Por favor, ingrese un monto valido para retirar");
+          swal("Por favor, ingrese un monto valido para depositar");
           return;
         }
 
@@ -171,41 +220,38 @@
 
         agregarMovimiento("Retiro", monto, saldoActual);
         inputMonto.value = "";
-        mostrarSaldo(); 
+        mostrarSaldo();
         swal("Confirmado", "operacion efectuada con exito!", "success");
       });
 
       const btnLimpiar = document.getElementById("btnLimpiar");
-         btnLimpiar.addEventListener("click", () => {
-          swal({
-            title: "¿Estás seguro?",
-            text: "¡Una vez borrado no podrás recuperar el historial!",
-            icon: "warning",
-            buttons: ["Cancelar", "Sí, borrar"],
-            dangerMode: true,
-           })
-           .then((willDelete) => {
-              if (willDelete) {
-              historialMovimientos = [];
-              localStorage.removeItem("historialMovimientos");
+      btnLimpiar.addEventListener("click", () => {
+        swal({
+          title: "¿Estás seguro?",
+          text: "¡Una vez borrado no podrás recuperar el historial!",
+          icon: "warning",
+          buttons: ["Cancelar", "Sí, borrar"],
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            historialMovimientos = [];
+            localStorage.removeItem("historialMovimientos");
             mostrarHistorial();
 
             swal("¡Historial eliminado!", { icon: "success" });
-              } else {
-              swal("Tu historial está a salvo 😉");
-              }
-             });
-            });
+          } else {
+            swal("Tu historial está a salvo 😉");
+          }
+        });
+      });
 
       mostrarHistorial();
-      mostrarSaldo(); 
+      mostrarSaldo();
     </script>
     <!-- Librería jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<!-- script del comprobante -->
-<script src="../scripts/ComprobantePDF.js"></script>
-
-
+    <!-- script del comprobante -->
+    <script src="../scripts/ComprobantePDF.js"></script>
   </body>
 </html>
