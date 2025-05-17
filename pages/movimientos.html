@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Archivo CSS -->
     <link rel="stylesheet" href="../css/style.css" />
@@ -54,6 +55,7 @@
 
         <section class="card p-4 mb-4 shadow-sm">
           <h2 class="h4">Operaciones</h2>
+          <p>Saldo disponible: <span id="saldo">$0.00</span></p>
           <form class="row g-3">
             <div class="col-md-6">
               <label for="monto" class="form-label">Monto:</label>
@@ -82,6 +84,19 @@
             </thead>
             <tbody></tbody>
           </table>
+          <div style="display: flex; justify-content: center;">
+            <button id="btnLimpiar" class="btn btn-warning mt-2">
+              <i class="bi bi-trash"></i> Limpiar historial
+            </button>
+          </div>
+            <div style="display: flex; justify-content: center; margin-top: 40px;">
+             <button 
+                onclick="generarComprobante('Ash Ketchum', '0987654321', 'Depósito', 100, 600)" 
+                style="padding: 12px 24px; font-size: 16px; background-color: #ffcb05; color: #2a75bb; border: none; border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
+                Descargar comprobante de transacción
+              </button>
+            </div>
+
         </section>
       </main>
     </div>
@@ -94,6 +109,10 @@
       const btnDepositar = document.getElementById("btnDepositar");
       const btnRetirar = document.getElementById("btnRetirar");
       const tablaHistorialBody = document.querySelector("#tablaHistorial tbody");
+
+      function mostrarSaldo() {
+        document.getElementById("saldo").textContent = `$${saldoActual.toFixed(2)}`;
+      }
 
       function agregarMovimiento(tipo, monto, saldoFinal) {
         const fechaActual = new Date().toLocaleString();
@@ -122,7 +141,7 @@
       btnDepositar.addEventListener("click", () => {
         const monto = parseFloat(inputMonto.value);
         if (isNaN(monto) || monto <= 0) {
-          alert("Por favor, ingresa un monto válido para depositar.");
+          swal("Por favor, ingrese un monto valido para retirar");
           return;
         }
 
@@ -131,17 +150,19 @@
 
         agregarMovimiento("Depósito", monto, saldoActual);
         inputMonto.value = "";
+        mostrarSaldo();
+        swal("Confirmado", "operacion efectuada con exito!", "success");
       });
 
       btnRetirar.addEventListener("click", () => {
         const monto = parseFloat(inputMonto.value);
         if (isNaN(monto) || monto <= 0) {
-          alert("Por favor, ingresa un monto válido para retirar.");
+          swal("Por favor, ingrese un monto valido para retirar");
           return;
         }
 
         if (monto > saldoActual) {
-          alert("No tienes suficiente saldo para retirar esa cantidad.");
+          swal("No tienes suficiente saldo parta retirar esa cantidad");
           return;
         }
 
@@ -150,9 +171,34 @@
 
         agregarMovimiento("Retiro", monto, saldoActual);
         inputMonto.value = "";
+        mostrarSaldo(); 
+        swal("Confirmado", "operacion efectuada con exito!", "success");
       });
 
+      const btnLimpiar = document.getElementById("btnLimpiar");
+         btnLimpiar.addEventListener("click", () => {
+          swal({
+            title: "¿Estás seguro?",
+            text: "¡Una vez borrado no podrás recuperar el historial!",
+            icon: "warning",
+            buttons: ["Cancelar", "Sí, borrar"],
+            dangerMode: true,
+           })
+           .then((willDelete) => {
+              if (willDelete) {
+              historialMovimientos = [];
+              localStorage.removeItem("historialMovimientos");
+            mostrarHistorial();
+
+            swal("¡Historial eliminado!", { icon: "success" });
+              } else {
+              swal("Tu historial está a salvo 😉");
+              }
+             });
+            });
+
       mostrarHistorial();
+      mostrarSaldo(); 
     </script>
     <!-- Librería jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -160,12 +206,6 @@
 <!-- script del comprobante -->
 <script src="../scripts/ComprobantePDF.js"></script>
 
-<div style="display: flex; justify-content: center; margin-top: 40px;">
-  <button 
-    onclick="generarComprobante('Ash Ketchum', '0987654321', 'Depósito', 100, 600)" 
-    style="padding: 12px 24px; font-size: 16px; background-color: #ffcb05; color: #2a75bb; border: none; border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
-    Descargar comprobante de transacción
-  </button>
-</div>
+
   </body>
 </html>
