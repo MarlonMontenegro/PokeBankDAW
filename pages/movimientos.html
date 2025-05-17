@@ -90,12 +90,15 @@
             </button>
           </div>
             <div style="display: flex; justify-content: center; margin-top: 40px;">
-             <button 
-                onclick="generarComprobante('Ash Ketchum', '0987654321', 'Depósito', 100, 600)" 
+             
+              <button id="btnComprobante"
+                
                 style="padding: 12px 24px; font-size: 16px; background-color: #ffcb05; color: #2a75bb; border: none; border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
                 Descargar comprobante de transacción
               </button>
             </div>
+
+
 
         </section>
       </main>
@@ -110,6 +113,10 @@
       const btnRetirar = document.getElementById("btnRetirar");
       const tablaHistorialBody = document.querySelector("#tablaHistorial tbody");
 
+
+      let ultimoMovimiento = null;
+
+
       function mostrarSaldo() {
         document.getElementById("saldo").textContent = `$${saldoActual.toFixed(2)}`;
       }
@@ -121,6 +128,7 @@
         historialMovimientos.push(movimiento);
         localStorage.setItem("historialMovimientos", JSON.stringify(historialMovimientos));
 
+        ultimoMovimiento = movimiento; // vamos a ver si lo guarda para que si salga en el pdf 
         mostrarHistorial();
       }
 
@@ -196,6 +204,25 @@
               }
              });
             });
+
+          const btnComprobante = document.getElementById("btnComprobante");
+          btnComprobante.addEventListener("click",() => {
+
+              if (!ultimoMovimiento){
+                swal("Aún no se ha realizado ningún movimiento");
+                return;
+              }
+
+              generarComprobante(
+                "Ash Ketchum",
+                "0987654321",
+                ultimoMovimiento.tipo,
+                parseFloat(ultimoMovimiento.monto),
+                parseFloat(ultimoMovimiento.saldo)
+
+              );
+                 });
+
 
       mostrarHistorial();
       mostrarSaldo(); 
