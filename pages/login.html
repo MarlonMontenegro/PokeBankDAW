@@ -117,19 +117,34 @@
     </style>
   </head>
 
-  <body>
+<body>
   <style>
     .login-container {
       position: absolute;
       top: 6.5%; /* Bajado un poco desde 5%, pero aún más arriba que 8% */
       left: 50%;
       transform: translate(-50%, 0);
-      background-color: white;
+      background-color: #000000; /* negro */
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       width: 320px;
       text-align: center;
+      color: white; /* texto en blanco */
+    }
+
+    .login-container label {
+      color: white; /* etiquetas en blanco */
+    }
+
+    .login-container input.form-control {
+      background-color: #222; /* fondo oscuro para inputs */
+      border: 1px solid #444;
+      color: white;
+    }
+
+    .login-container input.form-control::placeholder {
+      color: #bbb;
     }
 
     .btn-login {
@@ -139,6 +154,14 @@
 
     .btn-login:hover {
       background-color: #256917;
+    }
+
+    a.text-decoration-none {
+      color: #a5d6a7; /* un verde clarito para enlaces */
+    }
+
+    a.text-decoration-none:hover {
+      color: #7cb342;
     }
   </style>
 
@@ -181,6 +204,7 @@
     </form>
   </div>
 </body>
+
 
 
 
